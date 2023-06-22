@@ -3,7 +3,7 @@ from random import uniform
 
 
 class TaskWindow(ct.CTkToplevel):
-    def __init__(self, master, goal: str, progress = float, **kwargs):
+    def __init__(self, master, goal: str, progress: float, **kwargs):
         super().__init__(master, **kwargs)
         self.title(goal)
 
@@ -37,7 +37,17 @@ class TaskWindow(ct.CTkToplevel):
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
         self.textbox.pack(padx=20, pady=5)
         self.textbox.insert("0.0", "Task X")
-    
+
+        # define a new command for the delete button
+        def delete_goal():
+            self.destroy()
+            # TODO - after bundling the componenets with a proper class strucutre, delete the goal itself here
+            
+
+        # create delete button
+        self.delete_button = ct.CTkButton(self, width=50, height=10, text="❌", font=(100, 0), command=delete_goal)
+        self.delete_button.pack(padx=60, pady=5)
+
 
         # define an event to check for the user pressing enter
         def new_task(event):
@@ -45,7 +55,6 @@ class TaskWindow(ct.CTkToplevel):
             self.scrollable_task_entry_frame.add_task(self.textbox.get("0.0", "end"))
             self.textbox.delete("0.0", "end")
         self.bind('<Return>', new_task)
-
 
 
 class ScrollableTaskEntryFrame(ct.CTkScrollableFrame):
