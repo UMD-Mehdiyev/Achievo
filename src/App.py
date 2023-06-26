@@ -3,7 +3,6 @@ import customtkinter as ct
 import Utilities
 
 
-
 # main class to bundle app components together
 class App(ct.CTk):
     def __init__(self):
@@ -19,8 +18,8 @@ class App(ct.CTk):
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
         # create scrollable frame
-        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, width=300, height=400)
-        self.scrollable_goal_entry_frame.grid(padx=200, pady=20, sticky="nsew")
+        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, width=200, height=400)
+        self.scrollable_goal_entry_frame.grid(padx=150, pady=20, sticky="nsew")
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)

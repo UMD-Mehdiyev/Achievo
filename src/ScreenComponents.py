@@ -16,24 +16,17 @@ class TaskWindow(ct.CTkToplevel):
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
-        # define a new command for the delete button
-        def delete_goal():
-            self.destroy()
-            # TODO - after bundling the componenets with a proper class strucutre, delete the goal itself here
-            
         # create the window's components
         self.label = ct.CTkLabel(self, text=goal.value, font=(100, 0))
         self.progress_bar = ct.CTkProgressBar(self, orientation="horizontal")
-        self.scrollable_task_entry_frame = ScrollableTaskEntryFrame(self, goal)
+        self.scrollable_task_entry_frame = ScrollableTaskEntryFrame(self, goal, width=300)
         self.textbox = ct.CTkTextbox(self, width=300, height=100, corner_radius=15)
         self.textbox.insert("0.0", "Task X")
-        self.delete_button = ct.CTkButton(self, width=50, height=10, text="❌ Delete Goal ❌", font=(100, 0), command=delete_goal)
         # pack the components into the window
         self.label.pack(padx=20, pady=(20, 0))
         self.progress_bar.pack(padx=20, pady=5)
         self.scrollable_task_entry_frame.pack(padx=20, pady=5)
         self.textbox.pack(padx=20, pady=5)
-        self.delete_button.pack(padx=60, pady=5)
 
         for _, task in enumerate(goal.tasks):
             self.scrollable_task_entry_frame.create_task(task)
@@ -66,9 +59,11 @@ class ScrollableTaskEntryFrame(ct.CTkScrollableFrame):
             for _, task in enumerate(self.parent_goal.tasks):
                 if task.value == task_components.value:
                     task.complete = task_components.toggle_completion()
+        def delete_task() -> None:
+            print("TASK DELETED!")
 
-        task_components.add_command(complete_task)
-        task_components.align(len(self.entries) * 2, 0, 10)
+        task_components.add_command(complete_task, delete_task)
+        task_components.align(len(self.entries) * 2, 10, 10)
         self.entries.append(task_components.get_components())
 
 
@@ -78,8 +73,8 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
         super().__init__(master, **kwargs)
         self.command = command
         self.current_task_window = None
-        self.grid_rowconfigure(1, weight=3)
-        self.grid_columnconfigure(3, weight=1)
+        self.grid_rowconfigure(1, weight=4)
+        self.grid_columnconfigure(4, weight=1)
         self.entries = []
 
     def create_goal(self, goal: str):
@@ -90,6 +85,8 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
                 self.current_task_window.focus()
             else:
                 self.current_task_window.focus()  # if window exists focus it
-        goal_components.add_command(open_task_window)
+        def delete_goal():
+            print("GOAL DELETED!")
+        goal_components.add_command(open_task_window, delete_goal)
         goal_components.align(len(self.entries) * 2, 10, 10)
         self.entries.append(goal_components.get_components())
