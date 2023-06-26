@@ -8,7 +8,7 @@ class TaskWindow(ct.CTkToplevel):
     def __init__(self, master, goal: GoalEntry, **kwargs):
         super().__init__(master, **kwargs)
 
-        self.title(goal)
+        self.title(goal.value)
         self.wm_resizable(False, False) # disable resizing 
         # get preferred dimensions and window screen dimensions
         window_height, window_width = 600, 500
@@ -19,6 +19,7 @@ class TaskWindow(ct.CTkToplevel):
         # create the window's components
         self.label = ct.CTkLabel(self, text=goal.value, font=(100, 0))
         self.progress_bar = ct.CTkProgressBar(self, orientation="horizontal")
+        self.progress_bar.set(goal.update_progress())
         self.scrollable_task_entry_frame = ScrollableTaskEntryFrame(self, goal, width=300)
         self.textbox = ct.CTkTextbox(self, width=300, height=100, corner_radius=15)
         self.textbox.insert("0.0", "Task X")
@@ -29,14 +30,16 @@ class TaskWindow(ct.CTkToplevel):
         self.textbox.pack(padx=20, pady=5)
 
         for _, task in enumerate(goal.tasks):
-            self.scrollable_task_entry_frame.create_task(task)
+            self.scrollable_task_entry_frame.create_task(task, self.progress_bar)
             
         # define an event to check for the user pressing enter
         def new_task(event):
             # add the user's task to the list and clear the input
-            self.scrollable_task_entry_frame.create_task(self.textbox.get("0.0", "end"))
+            self.scrollable_task_entry_frame.create_task(self.textbox.get("0.0", "end"), self.progress_bar)
             goal.add_task(self.textbox.get("0.0", "end"))
             self.textbox.delete("0.0", "end")
+            # update progress bar
+            self.progress_bar.set(goal.update_progress())
         self.bind('<Return>', new_task)
 
 
@@ -47,7 +50,7 @@ class ScrollableTaskEntryFrame(ct.CTkScrollableFrame):
         self.parent_goal = goal
         self.entries = []
 
-    def create_task(self, task):
+    def create_task(self, task, task_progressbar):
         if isinstance(task, Task):
             task_components = TaskEntry(self, task.value)
             if task.complete:
@@ -56,9 +59,13 @@ class ScrollableTaskEntryFrame(ct.CTkScrollableFrame):
             task_components = TaskEntry(self, task)
 
         def complete_task() -> None:
+            
             for _, task in enumerate(self.parent_goal.tasks):
                 if task.value == task_components.value:
                     task.complete = task_components.toggle_completion()
+                    # update progress bar
+                    task_progressbar.set(self.parent_goal.update_progress())
+                    
         def delete_task() -> None:
             print("TASK DELETED!")
 

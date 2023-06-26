@@ -28,7 +28,7 @@ class GoalEntry(Goal):
         self.open_button = ct.CTkButton(master, width=50, height=10, text="📖", font=(100, 0))
         self.delete_button = ct.CTkButton(master, width=50, height=10, text="❌", font=(100, 0))
         self.progress_bar = ct.CTkProgressBar(master, orientation="horizontal")
-        self.progress_bar.set(0)
+        self.progress_bar.set(self.update_progress() if len(self.tasks) != 0 else 0)
         self.components.extend([self.checkbox, self.goal_entry, self.open_button, self.delete_button, self.progress_bar])
 
     def align(self, factor: int, x_padding: int, y_padding: int) -> None:
@@ -40,7 +40,7 @@ class GoalEntry(Goal):
     
     def update_progress(self) -> float:
         complete_tasks = len([task for task in self.tasks if task.complete])
-        self.progress = complete_tasks / len(self.tasks)
+        self.progress = (complete_tasks / len(self.tasks)) if len(self.tasks) != 0 else 0
         self.progress_bar.set(self.progress)
         return self.progress
 
