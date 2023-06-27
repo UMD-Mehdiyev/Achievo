@@ -67,7 +67,12 @@ class ScrollableTaskEntryFrame(ct.CTkScrollableFrame):
                     task_progressbar.set(self.parent_goal.update_progress())
                     
         def delete_task() -> None:
-            print("TASK DELETED!")
+            self.entries.remove(task_components.get_components())
+            for component in task_components.get_components():
+                component.destroy()
+            # update progress bar
+            self.parent_goal.remove_task(task)
+            task_progressbar.set(self.parent_goal.update_progress())
 
         task_components.add_command(complete_task, delete_task)
         task_components.align(len(self.entries) * 2, 10, 10)
@@ -93,7 +98,11 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
             else:
                 self.current_task_window.focus()  # if window exists focus it
         def delete_goal():
-            print("GOAL DELETED!")
+            self.entries.remove(goal_components.get_components())
+            for component in goal_components.get_components():
+                component.destroy()
+            
+
         goal_components.add_command(open_task_window, delete_goal)
         goal_components.align(len(self.entries) * 2, 10, 10)
         self.entries.append(goal_components.get_components())
