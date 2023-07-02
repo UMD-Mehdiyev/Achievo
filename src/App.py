@@ -12,8 +12,16 @@ class App(ct.CTk):
         self.title("Achievo")
         self.wm_resizable(False, False) # disable resizing 
 
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=4)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+
+        self.help_window = None
+
         # get preferred dimensions and window screen dimensions
-        window_height, window_width = 600, 700
+        window_height, window_width = 600, 800
         x_coordinate, y_coordinate = Utilities.screen_dim(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
@@ -26,26 +34,43 @@ class App(ct.CTk):
             with open(filename, 'rb') as file:
                 # Use pickle to load the list of goals from the file
                 goals_data = pickle.load(file)
-                print(goals_data)
         except:
             goals_data = []
 
+        
+        def app_info():
+            if self.help_window is None or not self.help_window.winfo_exists():
+                self.help_window = HelpWindow(self)  # create window if its None or destroyed
+            else:
+                self.help_window.focus()  # if window exists focus it
+        
+        def show_data():
+            print("Coming Soon!")
+
         # create progress counter
         self.progress_counter = ct.CTkLabel(master=self, font=(200, 25))
-        self.progress_counter.grid(padx=200, pady=10, sticky="nsew")
+        self.progress_counter.grid(row=0, column=0, columnspan=2, pady=(20, 0), sticky="nsew")
 
         # create main progress bar
-        self.progress_bar = ct.CTkProgressBar(master=self, width=300)
-        self.progress_bar.grid(padx=200, pady=10, sticky="nsew")
-
-        # create scrollable frame
-        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=300, bar=self.progress_bar, counter=self.progress_counter)
-        self.scrollable_goal_entry_frame.grid(padx=200, pady=20)
+        self.progress_bar = ct.CTkProgressBar(master=self, width=600)
+        self.progress_bar.grid(row=1, column=0, columnspan=2, pady=(20, 0))
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
-        self.textbox.grid(padx=200, pady=20, sticky="nsew")
-        self.textbox.insert("0.0", "Enter Goal Here")
+        self.textbox.grid(row=2, column=0)
+        self.textbox.insert("0.0", "Write Goal Here...")
+
+        # create a help button 
+        self.help_button = ct.CTkButton(master=self, text="❓", width=20, height=20, font=(20, 20), command=app_info)
+        self.help_button.grid(row=3, column=0, columnspan=2, padx=(10, 10), pady=(10, 10), sticky="sw")
+
+        # create a button for a future data update
+        self.data_button = ct.CTkButton(master=self, text="📊", width=20, height=20, font=(20, 20), command=show_data)
+        self.data_button.grid(row=3, column=0, columnspan=2,padx=(10, 10), pady=(10, 10), sticky="se")
+
+        # create scrollable frame
+        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=400, bar=self.progress_bar, counter=self.progress_counter)
+        self.scrollable_goal_entry_frame.grid(row=2, column=1, pady=30)
 
         # define an event to check for the user pressing enter
         def new_goal(event):

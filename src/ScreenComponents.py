@@ -1,6 +1,23 @@
 from Goal import Goal, GoalEntry
 import customtkinter as ct
+import Utilities
 
+
+class HelpWindow(ct.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.title("Achievo Info")
+        self.wm_resizable(False, False) # disable resizing 
+
+        # get preferred dimensions and window screen dimensions
+        window_height, window_width = 300, 400
+        x_coordinate, y_coordinate = Utilities.screen_dim(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
+        # set coordinates
+        self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
+        self.label = ct.CTkLabel(self, text="<information about app and how to use goes here>")
+        self.label.pack(padx=20, pady=100)
 
 class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
     def __init__(self, master, goals: list[Goal], bar, counter, command=None, **kwargs):
