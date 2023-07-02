@@ -34,13 +34,15 @@ class App(ct.CTk):
             with open(filename, 'rb') as file:
                 # Use pickle to load the list of goals from the file
                 goals_data = pickle.load(file)
-                print(goals_data)
         except:
             goals_data = []
 
         
         def app_info():
-            print("Coming Soon!")
+            if self.help_window is None or not self.help_window.winfo_exists():
+                self.help_window = HelpWindow(self)  # create window if its None or destroyed
+            else:
+                self.help_window.focus()  # if window exists focus it
         
         def show_data():
             print("Coming Soon!")
