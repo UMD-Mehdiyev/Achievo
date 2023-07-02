@@ -3,11 +3,12 @@ import customtkinter as ct
 
 
 class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
-    def __init__(self, master, goals: list[Goal], command=None, **kwargs):
+    def __init__(self, master, goals: list[Goal], bar, counter, command=None, **kwargs):
         super().__init__(master, **kwargs)
         self.command = command
         self.goals = goals
-        self.current_task_window = None
+        self.progress_bar = bar
+        self.progress_counter = counter
 
         self.grid_rowconfigure(0, weight=3)
         self.grid_columnconfigure(0, weight=3)
@@ -17,6 +18,18 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
 
         for curr_goal in self.goals:
             self.create_entry(curr_goal)
+        
+        self.update_progress()
+
+    def update_progress(self) -> None:
+        if len(self.goals) > 0:
+            completed_goals = len([x for x in self.goals if x.complete])
+            val = completed_goals / len(self.goals)
+            self.progress_bar.set(val)
+            self.progress_counter.configure(text=f"{round(val * 100)}% Complete!")
+        else:
+            self.progress_bar.set(0)
+            self.progress_counter.configure(text="0% Complete!")
 
 
     def create_goal(self, new_goal: str) -> bool:
@@ -28,6 +41,7 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
         goal = Goal(new_goal)
         self.goals.append(goal)
         self.create_entry(goal)
+        self.update_progress()
         return True
 
     def create_entry(self, goal: Goal):
@@ -42,12 +56,15 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
                 goal.complete = False
             else:
                 goal.complete = True
-            
+            self.update_progress()
+
         def delete_goal():
             self.goals.remove(goal)
             self.entries.remove(goal_components.components)
             for component in goal_components.components:
                 component.destroy()
+            self.update_progress()
+
 
         goal_components.add_command(complete_goal, delete_goal)
         goal_components.align(len(self.entries))

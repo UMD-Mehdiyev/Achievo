@@ -30,10 +30,17 @@ class App(ct.CTk):
         except:
             goals_data = []
 
+        # create progress counter
+        self.progress_counter = ct.CTkLabel(master=self, font=(200, 25))
+        self.progress_counter.grid(padx=200, pady=10, sticky="nsew")
+
+        # create main progress bar
+        self.progress_bar = ct.CTkProgressBar(master=self, width=300)
+        self.progress_bar.grid(padx=200, pady=10, sticky="nsew")
 
         # create scrollable frame
-        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=300)
-        self.scrollable_goal_entry_frame.grid(padx=200, pady=(100, 0))
+        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=300, bar=self.progress_bar, counter=self.progress_counter)
+        self.scrollable_goal_entry_frame.grid(padx=200, pady=20)
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
