@@ -32,8 +32,8 @@ class App(ct.CTk):
 
 
         # create scrollable frame
-        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=200, height=400)
-        self.scrollable_goal_entry_frame.grid(padx=150, pady=20, sticky="nsew")
+        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=300)
+        self.scrollable_goal_entry_frame.grid(padx=200, pady=(100, 0))
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
@@ -43,9 +43,10 @@ class App(ct.CTk):
         # define an event to check for the user pressing enter
         def new_goal(event):
             # add the user's goal to the list and clear the input
-            self.scrollable_goal_entry_frame.create_goal(self.textbox.get("0.0", "end"))
+            self.scrollable_goal_entry_frame.create_goal(self.textbox.get("0.0", "end").strip())
             self.textbox.delete("0.0", "end")
         self.bind('<Return>', new_goal)
+
 
         def on_closing():
   
