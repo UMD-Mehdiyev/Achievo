@@ -3,7 +3,6 @@ import customtkinter as ct
 import Utilities
 import pickle
 
-
 # main class to bundle app components together
 class App(ct.CTk):
     def __init__(self):
@@ -11,6 +10,8 @@ class App(ct.CTk):
 
         self.title("Achievo")
         self.wm_resizable(False, False) # disable resizing 
+        
+        self.configure(fg_color="#011627")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -57,6 +58,7 @@ class App(ct.CTk):
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
+        self.textbox.configure(fg_color="#010E1A")
         self.textbox.grid(row=2, column=0)
         self.textbox.insert("0.0", "Write Goal Here...")
 
@@ -70,6 +72,7 @@ class App(ct.CTk):
 
         # create scrollable frame
         self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=400, bar=self.progress_bar, counter=self.progress_counter)
+        self.scrollable_goal_entry_frame.configure(fg_color="#010E1A")
         self.scrollable_goal_entry_frame.grid(row=2, column=1, pady=30)
 
         # define an event to check for the user pressing enter
