@@ -9,6 +9,7 @@ class HelpWindow(ct.CTkToplevel):
 
         self.title("Achievo Info")
         self.wm_resizable(False, False) # disable resizing 
+        self.configure(fg_color="#011627")
 
         # get preferred dimensions and window screen dimensions
         window_height, window_width = 300, 400
@@ -16,8 +17,27 @@ class HelpWindow(ct.CTkToplevel):
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
-        self.label = ct.CTkLabel(self, text="<information about app and how to use goes here>")
+        self.label = ct.CTkLabel(self, text="Type your goal in the textbox on the left side.\n" +
+                                            "Then press enter to get it on the list itself.")
         self.label.pack(padx=20, pady=100)
+
+class DataWindow(ct.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.title("Data")
+        self.wm_resizable(False, False) # disable resizing 
+        self.configure(fg_color="#011627")
+
+        # get preferred dimensions and window screen dimensions
+        window_height, window_width = 300, 400
+        x_coordinate, y_coordinate = Utilities.screen_dim(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
+        # set coordinates
+        self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
+
+        self.label = ct.CTkLabel(self, text="Coming Soon!")
+        self.label.pack(padx=20, pady=100)
+
 
 class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
     def __init__(self, master, goals: list[Goal], bar, counter, command=None, **kwargs):
