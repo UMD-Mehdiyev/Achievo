@@ -13,7 +13,7 @@ class HelpWindow(ct.CTkToplevel):
 
         # get preferred dimensions and window screen dimensions
         window_height, window_width = 300, 400
-        x_coordinate, y_coordinate = Utilities.screen_dim(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
+        x_coordinate, y_coordinate = Utilities.center_screen(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
@@ -31,7 +31,7 @@ class DataWindow(ct.CTkToplevel):
 
         # get preferred dimensions and window screen dimensions
         window_height, window_width = 300, 400
-        x_coordinate, y_coordinate = Utilities.screen_dim(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
+        x_coordinate, y_coordinate = Utilities.center_screen(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 

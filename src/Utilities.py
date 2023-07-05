@@ -1,6 +1,21 @@
+from typing import Tuple
 
-def screen_dim(pref_height: int, pref_width: int, screen_height: int, screen_width: int):
-    # calculate center of screen based on the given numbers
+def center_screen(pref_height: int, pref_width: int, screen_height: int, screen_width: int) -> Tuple[int, int]:
+    """Retrieve the (x, y) coordinate that would center the screen.
+    
+    Given the preferred dimensions of the app screen and the actual dimensions of the screen, 
+    this function will calculate the best x and y coordinates for where the screen should be 
+    placed in order to be in the center of the user's viewable screen.  
+
+    Arguments:
+        pref_height is the preferred height of the application screen
+        pref_width is the preferred width of the application screen
+        screen_height is the height of the user's viewable screen
+        screen_width is the width of the user's viewable screen
+
+    Returns:
+        two integers, the first being the x coordinate and the second being the y coordinate
+    """
     x_coordinate = int((screen_width / 2) - (pref_width / 2))
     y_coordinate = int((screen_height / 2) - (pref_height / 2))
     return x_coordinate, y_coordinate
