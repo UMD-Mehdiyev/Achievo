@@ -76,6 +76,7 @@ class ScrollableGoalEntryFrame(ct.CTkScrollableFrame):
                 return False
             
         goal = Goal(new_goal)
+        goal.value = Utilities.validate(goal.value, 25)
         self.goals.append(goal)
         self.create_entry(goal)
         self.update_progress()
