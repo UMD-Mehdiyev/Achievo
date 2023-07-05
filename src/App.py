@@ -3,7 +3,6 @@ import customtkinter as ct
 import Utilities
 import pickle
 
-
 # main class to bundle app components together
 class App(ct.CTk):
     def __init__(self):
@@ -11,6 +10,8 @@ class App(ct.CTk):
 
         self.title("Achievo")
         self.wm_resizable(False, False) # disable resizing 
+        
+        self.configure(fg_color="#011627")
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -19,6 +20,7 @@ class App(ct.CTk):
         self.grid_columnconfigure(1, weight=1)
 
         self.help_window = None
+        self.data_window = None
 
         # get preferred dimensions and window screen dimensions
         window_height, window_width = 600, 800
@@ -45,8 +47,11 @@ class App(ct.CTk):
                 self.help_window.focus()  # if window exists focus it
         
         def show_data():
-            print("Coming Soon!")
-
+            if self.data_window is None or not self.data_window.winfo_exists():
+                self.data_window = DataWindow(self)  # create window if its None or destroyed
+            else:
+                self.data_window.focus()  # if window exists focus it
+        
         # create progress counter
         self.progress_counter = ct.CTkLabel(master=self, font=(200, 25))
         self.progress_counter.grid(row=0, column=0, columnspan=2, pady=(20, 0), sticky="nsew")
@@ -57,19 +62,23 @@ class App(ct.CTk):
 
         # create text input
         self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
+        self.textbox.configure(fg_color="#010E1A")
         self.textbox.grid(row=2, column=0)
         self.textbox.insert("0.0", "Write Goal Here...")
 
         # create a help button 
         self.help_button = ct.CTkButton(master=self, text="❓", width=20, height=20, font=(20, 20), command=app_info)
         self.help_button.grid(row=3, column=0, columnspan=2, padx=(10, 10), pady=(10, 10), sticky="sw")
+        self.help_button.configure(fg_color='transparent')
 
         # create a button for a future data update
         self.data_button = ct.CTkButton(master=self, text="📊", width=20, height=20, font=(20, 20), command=show_data)
         self.data_button.grid(row=3, column=0, columnspan=2,padx=(10, 10), pady=(10, 10), sticky="se")
+        self.data_button.configure(fg_color='transparent')
 
         # create scrollable frame
         self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=400, bar=self.progress_bar, counter=self.progress_counter)
+        self.scrollable_goal_entry_frame.configure(fg_color="#010E1A")
         self.scrollable_goal_entry_frame.grid(row=2, column=1, pady=30)
 
         # define an event to check for the user pressing enter
