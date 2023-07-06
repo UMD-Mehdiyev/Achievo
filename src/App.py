@@ -1,11 +1,13 @@
 from ScreenComponents import *
-import customtkinter as ct
+import customtkinter as ctk
 import Utilities
 import pickle
 
-class App(ct.CTk):
+
+class App(ctk.CTk):
     """ Main class to bundle app components together. """
-    def __init__(self):
+    def __init__(self) -> None:
+        """ Create a new main application frame. """
         super().__init__()
 
         self.title("Achievo") 
@@ -29,7 +31,8 @@ class App(ct.CTk):
         # set coordinates
         self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
-        def app_info():
+
+        def app_info() -> None:
             """ Command for the help button press.
 
             When the help button is pressed, this command will open its respective window.
@@ -39,7 +42,8 @@ class App(ct.CTk):
             else:
                 self.help_window.focus()  # if window exists just focus on it
         
-        def show_data():
+
+        def show_data() -> None:
             """ Command for the data button press.
 
             When the data button is pressed, this command will open its respective window.
@@ -49,7 +53,8 @@ class App(ct.CTk):
             else:
                 self.data_window.focus()  # if window exists just focus on it
 
-        def new_goal(event):
+
+        def new_goal(event) -> None:
             """ Command for enter key event.
 
             When the enter key is pressed, this command will create a new
@@ -59,7 +64,8 @@ class App(ct.CTk):
             self.scrollable_goal_entry_frame.create_goal(self.textbox.get("0.0", "end").strip())
             self.textbox.delete("0.0", "end")
 
-        def on_closing():
+
+        def on_closing() -> None:
             """ Command for window closing event.
 
             When the application screen is closed, this command will save all the 
@@ -77,7 +83,6 @@ class App(ct.CTk):
 
 
         try:
-        
             filename = 'saved_goals.pickle'
 
             # open the file in binary mode
@@ -87,34 +92,34 @@ class App(ct.CTk):
         except:
             goals_data = [] # if any type of error occurred, just make the list empty
 
-        
         # create progress counter (number value above the progress bar)
-        self.progress_counter = ct.CTkLabel(master=self, font=(200, 25))
+        self.progress_counter = ctk.CTkLabel(master=self, font=(200, 25))
         self.progress_counter.grid(row=0, column=0, columnspan=2, pady=(20, 0), sticky="nsew")
 
         # create main progress bar
-        self.progress_bar = ct.CTkProgressBar(master=self, width=600)
+        self.progress_bar = ctk.CTkProgressBar(master=self, width=600)
         self.progress_bar.grid(row=1, column=0, columnspan=2, pady=(20, 0))
 
         # create text input
-        self.textbox = ct.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
+        self.textbox = ctk.CTkTextbox(master=self, width=300, height=100, corner_radius=15)
         self.textbox.configure(fg_color="#010E1A")
         self.textbox.grid(row=2, column=0)
         self.textbox.insert("0.0", "Write Goal Here...")
         self.textbox.bind('<Return>', new_goal) # add the command to the text box
 
         # create a help button 
-        self.help_button = ct.CTkButton(master=self, text="❓", width=20, height=20, font=(20, 20), command=app_info)
+        self.help_button = ctk.CTkButton(master=self, text="❓", width=20, height=20, font=(20, 20), command=app_info)
         self.help_button.grid(row=3, column=0, columnspan=2, padx=(10, 10), pady=(10, 10), sticky="sw")
         self.help_button.configure(fg_color='transparent')
 
         # create a button for a future data update
-        self.data_button = ct.CTkButton(master=self, text="📊", width=20, height=20, font=(20, 20), command=show_data)
+        self.data_button = ctk.CTkButton(master=self, text="📊", width=20, height=20, font=(20, 20), command=show_data)
         self.data_button.grid(row=3, column=0, columnspan=2,padx=(10, 10), pady=(10, 10), sticky="se")
         self.data_button.configure(fg_color='transparent')
 
         # create scrollable frame
-        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=400, bar=self.progress_bar, counter=self.progress_counter)
+        self.scrollable_goal_entry_frame = ScrollableGoalEntryFrame(master=self, goals=goals_data, width=300, height=400, 
+                                                                    progress_bar=self.progress_bar, progress_counter=self.progress_counter)
         self.scrollable_goal_entry_frame.configure(fg_color="#010E1A")
         self.scrollable_goal_entry_frame.grid(row=2, column=1, pady=30)
 

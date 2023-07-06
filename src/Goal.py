@@ -1,5 +1,6 @@
 import customtkinter as ctk
 
+
 class Goal():
     """
     Nothing too fancy, a Goal is simply defined as a value that's complete or incomplete.
@@ -37,7 +38,7 @@ class GoalEntry():
         self.components = []
         
         self.checkbox = ctk.CTkCheckBox(master, text=goal.value, font=(75, 0), corner_radius=100)
-        self.delete_button = ctk.CTkButton(master, width=10, text="❌")
+        self.delete_button = ctk.CTkButton(master, width=10, text="❌", fg_color='transparent')
         self.components.extend([self.checkbox, self.delete_button])
 
 
@@ -50,6 +51,7 @@ class GoalEntry():
         self.checkbox.grid(row=row_pos, column=0, padx=5, pady=5, sticky="W")
         self.delete_button.grid(row=row_pos, column=1, padx=5, pady=5, sticky="E")        
 
+
     def add_command(self, check_cmd, delete_cmd) -> None:
         """ Add commands to the two components to allow for functionality after they've been created.
 
@@ -59,5 +61,3 @@ class GoalEntry():
         """
         self.checkbox.configure(command=check_cmd)
         self.delete_button.configure(command=delete_cmd)
-
-

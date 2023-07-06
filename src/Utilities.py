@@ -1,5 +1,6 @@
 from typing import Tuple
 
+
 def center_screen(pref_height: int, pref_width: int, screen_height: int, screen_width: int) -> Tuple[int, int]:
     """Retrieve the (x, y) coordinate that would center the screen.
     
