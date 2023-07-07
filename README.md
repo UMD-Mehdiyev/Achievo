@@ -6,8 +6,9 @@ sometimes a headache to keep up with. Achievo is my own attempt at the classic T
 and I made it with simplicity at the forefront. The main user interface is made with CustomTkinter[^1] and with a basic class heirarchy. In a future update, a new data visualization feature will be made to view your progress on goal completition. 
 
 <p align="center">
-    ![Demo of what the application looks like](demo.png)
+    <img src="demo.png"/>
 </p>
+
 ---
 
 ### Setup:
