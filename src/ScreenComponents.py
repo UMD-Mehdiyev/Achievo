@@ -25,27 +25,6 @@ class HelpWindow(ctk.CTkToplevel):
         self.help_label.pack(padx=20, pady=100)
 
 
-class DataWindow(ctk.CTkToplevel):
-    """ Top level window to show data on goals. """
-    def __init__(self, *args, **kwargs) -> None:
-        """ Create a new data window. """
-        super().__init__(*args, **kwargs)
-
-        self.title("Data")
-        self.wm_resizable(False, False) # disable resizing 
-        self.configure(fg_color="#011627") # background color
-
-        # get preferred dimensions and window screen dimensions
-        window_height, window_width = 300, 400
-        x_coordinate, y_coordinate = Utilities.center_screen(window_height, window_width, self.winfo_screenheight(), self.winfo_screenwidth())
-        # set coordinates
-        self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
-
-        # send a quick message for the user
-        self.data_message = ctk.CTkLabel(self, text="Coming Soon!")
-        self.data_message.pack(padx=20, pady=100)
-
-
 class ScrollableGoalEntryFrame(ctk.CTkScrollableFrame):
     """ Custom scrollable frame that will contain the list of goal entries. """ 
     def __init__(self, master, goals: list[Goal], progress_bar, progress_counter, command=None, **kwargs) -> None:
@@ -76,6 +55,16 @@ class ScrollableGoalEntryFrame(ctk.CTkScrollableFrame):
             self.create_entry(curr_goal)
         self.update_progress()
 
+
+        def show_data() -> None:
+            """ Command for the data button press.
+
+            When the data button is pressed, this command will open its respective window.
+            """
+            if self.data_window is None or not self.data_window.winfo_exists():
+                self.data_window = DataWindow(self)  
+            else:
+                self.data_window.focus()  # if window exists just focus on it
 
     def update_progress(self) -> None:
         """ Update the progress bar and counter.

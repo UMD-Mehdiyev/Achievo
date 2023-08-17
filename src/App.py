@@ -1,4 +1,5 @@
 from ScreenComponents import *
+import matplotlib.pyplot as plt
 import customtkinter as ctk
 import Utilities
 import pickle
@@ -43,17 +44,6 @@ class App(ctk.CTk):
                 self.help_window.focus()  # if window exists just focus on it
         
 
-        def show_data() -> None:
-            """ Command for the data button press.
-
-            When the data button is pressed, this command will open its respective window.
-            """
-            if self.data_window is None or not self.data_window.winfo_exists():
-                self.data_window = DataWindow(self)  
-            else:
-                self.data_window.focus()  # if window exists just focus on it
-
-
         def new_goal(event) -> None:
             """ Command for enter key event.
 
@@ -91,6 +81,25 @@ class App(ctk.CTk):
                 goals_data = pickle.load(file)
         except:
             goals_data = [] # if any type of error occurred, just make the list empty
+
+
+        def show_data() -> None:
+            """ Command for the data button press.
+
+            When the data button is pressed, this command will open its respective window.
+            """
+            # get the number of completed goals and total goals
+            completed_goals = len([goal for goal in goals_data if goal.complete]) 
+            total_goals = len(goals_data)
+            
+            # organize the data 
+            labels = f'Total: {total_goals}', f'Completed: {completed_goals}'
+            data = [total_goals - completed_goals, completed_goals]
+
+            # create the pie graph itself
+            plt.pie(data, labels=labels)
+            plt.suptitle('Goal Completion') # title
+            plt.show()
 
         # create progress counter (number value above the progress bar)
         self.progress_counter = ctk.CTkLabel(master=self, font=(200, 25))
